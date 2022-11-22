@@ -2,6 +2,7 @@ import { useContext, useState } from 'react'
 import { AlertContext } from '../context/AlertProvider'
 import Cuadro from './cuadro'
 
+import ClientOnly from '../components/ClientOnly'
 
 const Tablero = () => {
   const [cuadros, setCuadros] = useState(Array(9).fill(''))
@@ -75,10 +76,12 @@ const Tablero = () => {
   return (
     <div className="min-h-screen bg-slate-800 items-center">
       <h1 className="text-8xl text-center mb-5 font-extrabold text-neutral-50 ">TOTITO</h1>
-      <div className="flex w-full justify-center">
-        <span className="flex w-1/4 py-2 text-white text-lg font-medium">{`El Turno es de ${turno}`}</span>
-        <span className="flex w-1/4 py-2 text-white text-lg font-medium">{`El Ganador es: ${ganador}`}</span>
-      </div>
+      <ClientOnly>
+        <div className="flex w-full justify-center">
+          <span className="flex w-1/4 py-2 text-white text-lg font-medium">{`El Turno es de ${turno}`}</span>
+          <span className="flex w-1/4 py-2 text-white text-lg font-medium">{`El Ganador es: ${ganador}`}</span>
+        </div>
+      </ClientOnly>
       <div className="grid grid-rows-3 grid-flow-col gap-1 justify-center items-center">
         {
           cuadros.map((item, indexItem) => {
