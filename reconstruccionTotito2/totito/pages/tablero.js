@@ -1,5 +1,7 @@
-import {useState} from "react"
-import Cuadro from './cuadro' 
+import { useContext, useState } from 'react'
+import { AlertContext } from '../context/AlertProvider'
+import Cuadro from './cuadro'
+
 
 const Tablero = () => {
   const [cuadros, setCuadros] = useState(Array(9).fill(''))
@@ -9,9 +11,15 @@ const Tablero = () => {
   const [posG3, setPos3] = useState(-1)
   const [ganador, setGanador] = useState('')
 
+  const alert = useContext(AlertContext)
+
   const pintaFigura = (indexItem) => {
     const misCuadritos = cuadros.slice()
-    if (misCuadritos[indexItem] === '' && !ganador) {
+    if (ganador != null && ganador) {
+      alert.show('Juego Terminado', `Ya ha ganado el ${ganador}`)
+    } else if (misCuadritos[indexItem] !== '') {
+      alert.show('Tablero', 'Casilla ya fue clickeada')
+    } else {
       misCuadritos.splice(indexItem, 1, turno)
       setCuadros(misCuadritos)
 
@@ -23,9 +31,6 @@ const Tablero = () => {
       } else {
         setTurno('X')
       }
-    } else {
-      // do a error tick
-      alert('error')
     }
   }
 
@@ -71,8 +76,8 @@ const Tablero = () => {
     <div className="min-h-screen bg-slate-800 items-center">
       <h1 className="text-8xl text-center mb-5 font-extrabold text-neutral-50 ">TOTITO</h1>
       <div className="flex w-full justify-center">
-        <span className="flex w-1/4 py-2 text-white">{`El Turno es de ${turno}`}</span>
-        <span className="flex w-1/4 py-2 text-white">{`El Ganador es: ${ganador}`}</span>
+        <span className="flex w-1/4 py-2 text-white text-lg font-medium">{`El Turno es de ${turno}`}</span>
+        <span className="flex w-1/4 py-2 text-white text-lg font-medium">{`El Ganador es: ${ganador}`}</span>
       </div>
       <div className="grid grid-rows-3 grid-flow-col gap-1 justify-center items-center">
         {
@@ -86,7 +91,7 @@ const Tablero = () => {
         }
       </div>
       <div className="flex w-full justify-center">
-        <button className="flex w-40 py-2 bg-orange-500 my-2 px-6 font-medium" onClick={() => reiniciarJuego()}>{`Reiniciar Juego`}</button>
+        <button className="flex w-40 py-2 bg-orange-500 my-2 px-6 text-lg font-medium" onClick={() => reiniciarJuego()}>{`Reiniciar Juego`}</button>
       </div>
     </div>
   )
