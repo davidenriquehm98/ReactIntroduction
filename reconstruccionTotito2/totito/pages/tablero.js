@@ -14,10 +14,22 @@ const Tablero = () => {
 
   const alert = useContext(AlertContext)
 
+  const alertEmpate = () => {
+    alert.show('Juego Terminado', `Empate, Todas las casillas han sido marcadas`)
+  }
+
+  const alertGanador = (_ganador) => {
+    alert.show('Juego Terminado', `Ya ha ganado el ${_ganador}`)
+  }
+
   const pintaFigura = (indexItem) => {
     const misCuadritos = cuadros.slice()
-    if (ganador != null && ganador) {
-      alert.show('Juego Terminado', `Ya ha ganado el ${ganador}`)
+    const arrCuadritosDisponibles = misCuadritos.filter((itm) => (!itm || itm === ''))
+    let cuadritosDisponibles = arrCuadritosDisponibles.length
+    if ((!ganador || ganador === '') && !cuadritosDisponibles) {
+      alertEmpate()
+    } else if (ganador != null && ganador) {
+      alertGanador(ganador)
     } else if (misCuadritos[indexItem] !== '') {
       alert.show('Tablero', 'Casilla ya fue clickeada')
     } else {
@@ -26,6 +38,14 @@ const Tablero = () => {
 
       const valGanador = calcularGanador(misCuadritos)
       setGanador(valGanador)
+      if (valGanador) {
+        alertGanador(valGanador)
+      }
+
+      cuadritosDisponibles = cuadritosDisponibles - 1
+      if ((!valGanador || valGanador === '') && !cuadritosDisponibles) {
+        alertEmpate()
+      }
 
       if (turno === 'X') {
         setTurno('O')
